@@ -38,7 +38,7 @@ class BaseVolume_dicom(dict):
         self.addToPrintList("Patient", v[1]['ID'], v, ol, 170)
         self["outdir"] = fname_outdir
         self.addToPrintList("Name of Images", os.listdir(fname_outdir + os.sep + v[1]['ID']), v, ol, 100)
-        for i,j in enumerate(v[1]):
+        for i,j in enumerate(v[1]): # loop through all tags and append to obj
             if i != 0:
                 self.addToPrintList(j, v[1][j], v, ol, i)
         # self.addToPrintList("MFR", v[1]['Manufacturer'], v, ol, 1)
@@ -150,7 +150,7 @@ class BaseVolume_mat(dict):
         self["output"].append(name)
         if name != 'Name of Images' and il != 170:
             print('%s-%s. The %s of the patient with the name of <%s> is %s' % (ol,il,name, v[1]['ID'], val))
-
+# v is tuple coming from volume_dicom(), kk is the name of the function,
 def vol(v, sample_size, kk, outi_folder, ch_flag):
     switcher={
             'Mean': mean,
@@ -174,16 +174,16 @@ def vol(v, sample_size, kk, outi_folder, ch_flag):
     for i in range(1, len(v[0]), sample_size):
         I = v[0][i]
 #        I = I - np.min(I)  # for CT 
-        F, B, c, f, b = foreground(I,outi_folder,v,i)
+        F, B, c, f, b = foreground(I,outi_folder,v,i) #fore_image, back_image, conv_hull, img[conv_hull], img[conv_hull==False]
         if np.std(F) == 0:  # whole zero slice, no measure computing
             continue
-        measure = func(F, B, c, f, b)
+        measure = func(F, B, c, f, b) # here is where the calculation works
         if np.isnan(measure) or np.isinf(measure):
             continue
             # measure = 0
         # To do (add something)
         M.append(measure)
-    return np.mean(M)
+    return np.mean(M) # return the mean of the value
        
 
 

@@ -3,7 +3,6 @@ Created on Sun Feb 10 11:21:31 2019, Last update on Tue July 13 10:42:18 PM 2021
 
 @author: Amir Reza Sadri ars329@case.edu
 """
-import sys
 import os
 import numpy as np
 import argparse
@@ -18,7 +17,6 @@ from itertools import accumulate
 import pandas as pd
 from scipy.cluster.vq import whiten
 from sklearn.manifold import TSNE
-
 import umap
 # import umap.umap_ as umap
 
@@ -32,6 +30,11 @@ csv_report = None
 first = True
 headers = []
 
+folders_flag = "False"
+save_masks_flag = "False"
+sample_size = 1
+middle_size = 100
+ch_flag = "False"
 
 def patient_name(root):
     print('MRQy is starting....')
@@ -120,7 +123,8 @@ def volume_dicom(scans, name):
              'NUM': len(scans)
     }
     tag_values = []
-    if args.t != 0:
+    t = 0
+    if t != 0:
         for de in tag_list:
             # if hasattr(inf, de) == False or inf.data_element(de).value == '':
             if hasattr(inf, de) == False:
