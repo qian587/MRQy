@@ -174,7 +174,7 @@ def vol(v, sample_size, kk, outi_folder, ch_flag):
     for i in range(1, len(v[0]), sample_size):
         I = v[0][i]
 #        I = I - np.min(I)  # for CT 
-        F, B, c, f, b = foreground(I,outi_folder,v,i) #fore_image, back_image, conv_hull, img[conv_hull], img[conv_hull==False]
+        F, B, c, f, b = foreground(I) #fore_image, back_image, conv_hull, img[conv_hull], img[conv_hull==False]
         if np.std(F) == 0:  # whole zero slice, no measure computing
             continue
         measure = func(F, B, c, f, b) # here is where the calculation works
@@ -187,7 +187,7 @@ def vol(v, sample_size, kk, outi_folder, ch_flag):
        
 
 
-def foreground(img,save_folder,v,inumber):
+def foreground(img):
     try:
         h = ex.equalize_hist(img[:,:])*255
         oi = np.zeros_like(img, dtype=np.uint16)
@@ -211,7 +211,6 @@ def foreground(img,save_folder,v,inumber):
         conv_hull = np.zeros_like(img, dtype=np.uint16)
         ch = np.multiply(conv_hull, 1)
     
-    # if not os.path.isdir(save_folder + os.sep + v[1]['ID']):
     return fore_image, back_image, conv_hull, img[conv_hull], img[conv_hull==False]
 
 
