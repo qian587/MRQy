@@ -87,7 +87,7 @@ def patient_name(root):
     return files, subjects, splits, mhas, mhas_subjects, mats, mat_subjects
 
 
-def volume_dicom(scans, name):
+def volume_dicom(scans, subject_label):
     scans = scans[int(0.005 *len(scans)*(100 - middle_size)):int(0.005 *len(scans)*(100 + middle_size))]
     inf = pydicom.dcmread(scans[0])
     if hasattr(inf, 'MagneticFieldStrength'):
@@ -102,13 +102,13 @@ def volume_dicom(scans, name):
             inf.RepetitionTime = 0
     if  hasattr(inf, 'EchoTime') == False:
             inf.EchoTime = 0
-    if folders_flag == "False":
-        name_vale = inf.PatientID
-    elif folders_flag == "True":
-        name_vale = name
+    # if folders_flag == "False":
+    #     name_vale = inf.PatientID
+    # elif folders_flag == "True":
+    #     name_vale = name
         
     tags = {
-             'ID': name_vale,
+             'ID': subject_label,
              'MFR': inf.Manufacturer,
              'VRX': format(inf.PixelSpacing[0], '.2f'),
              'VRY': format(inf.PixelSpacing[1], '.2f'),
